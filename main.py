@@ -1,3 +1,4 @@
+from audioop import add
 import re
 import pygame
 import neat
@@ -114,7 +115,7 @@ class Pipe:
         self.PIPE_BOTTOM = PIPE_IMG
 
         self.passed = False # if the bird has passed the pipe
-        self.set_height
+        self.set_height()
 
     def set_height(self):
         self.height = random.randrange(50, 450)
@@ -172,8 +173,14 @@ class Base:
 
 
 
-def draw_window(win, bird):
-    win.blit(BG_IMG, (0,0)) 
+def draw_window(win, bird, pipes, base,):
+    win.blit(BG_IMG, (0,0))
+
+    for pipe in pipes:
+        pipe.draw(win)
+
+    base.draw(win)
+
     bird.draw(win)
     pygame.display.update()
 
@@ -181,7 +188,9 @@ def draw_window(win, bird):
 
 
 def main():
-    bird = Bird(200, 200)
+    bird = Bird(230, 350)
+    base = Base(730)
+    pipes = [Pipe(600)]
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     clock = pygame.time.Clock()
 
@@ -192,9 +201,33 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
- 
+
         # bird.move()
-        draw_window(win, bird)
+        score = 0
+        add_pipe = False
+        rem = []
+        for pipe in pipes:
+            if pipe.collide(bird):
+                pass
+
+            if pipe.x + pipe.PIPE_TOP.get_width() < 0:
+                rem.append(pipe)
+
+            if not pipe.passed and pipe.x < bird.x: 
+                pipe.passed = True
+                add_pipe = True
+
+            pipe.move()
+    
+        if add_pipe:
+            score += 1
+            pipes.append(Pipe(600))
+
+        for r in rem:
+            pipes.remove(r)
+        
+        base.move()
+        draw_window(win, bird, pipes, base)
     pygame.quit()
     quit()
 
