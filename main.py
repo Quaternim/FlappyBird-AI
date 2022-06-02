@@ -4,7 +4,12 @@ import time
 import os
 import random
 
-WIN_WIDTH = 600
+pygame.font.init()  # init font
+
+# fix my code
+
+
+WIN_WIDTH = 550
 WIN_HEIGHT = 800
 
 BIRD_IMGS = [
@@ -84,9 +89,44 @@ class Bird:
 
         rotated_image = pygame.transform.rotate(self.img, self.tilt) # rotate the bird
         new_rect = rotated_image.get_rect(center=self.img.get_rect(topleft = (self.x, self.y)).center) # get the center of the bird to rotate around
-        win.blit(rotated_image, new_rect.topleft) 
+        win.blit(rotated_image, new_rect.topleft)  # i think blit means draw in pygame
 
     
 
     def get_mask(self):
         return pygame.mask.from_surface(self.img)
+
+
+
+
+
+
+
+def draw_window(win, bird):
+    win.blit(BG_IMG, (0,0)) 
+    bird.draw(win)
+    pygame.display.update()
+
+
+
+
+def main():
+    bird = Bird(200, 200)
+    win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+    clock = pygame.time.Clock()
+
+
+    run = True
+    while run:
+        clock.tick(30)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+ 
+        # bird.move()
+        draw_window(win, bird)
+    pygame.quit()
+    quit()
+
+main()
+
