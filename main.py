@@ -152,18 +152,22 @@ class Base:
 
     def __init__(self, y):
         self.y = y
-        self.x1 = 0
+        self.x1 = 0 # dont need explaining
         self.x2 = self.WIDTH
 
     def move(self):
-        self.x1 -= self.VEL
-        self.x2 -= self.VEL
+        self.x1 -= self.VEL # make move
+        self.x2 -= self.VEL # make move
 
         if self.x1 + self.WIDTH < 0:
             self.x1 = self.x2 + self.WIDTH
-
+        # if the second base is off the screen, make it the first base
         if self.x2 + self.WIDTH < 0:
             self.x2 = self.x1 + self.WIDTH
+
+    def draw(self, win):
+        win.blit(self.IMG, (self.x1, self.y))
+        win.blit(self.IMG, (self.x2, self.y))
         
 
 
